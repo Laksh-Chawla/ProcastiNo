@@ -99,7 +99,7 @@ class TaskManager:
             id=self.task_id_counter,
             title=title,
             description=description,
-            assigned_app=assigned_app.lower(),
+            assigned_app=assigned_app.lower() if assigned_app else None,
             priority=priority,
             created_at=datetime.now().isoformat(),
             deadline=deadline,

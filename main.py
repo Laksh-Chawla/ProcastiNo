@@ -44,8 +44,6 @@ warnings.filterwarnings("ignore", message=".*MINGW.*")
 
 # Try to import ML stuff - not everyone has sklearn installed
 try:
-    import warnings
-
     warnings.filterwarnings("ignore", category=RuntimeWarning)
     from sklearn.ensemble import RandomForestClassifier
     from sklearn.preprocessing import StandardScaler
@@ -2575,6 +2573,10 @@ class ProcastiNOMainWindow(QMainWindow):
 
     def populate_tasks_list(self):
         """Populate the tasks list with complete buttons"""
+        # Check if tasks_list exists before trying to use it
+        if not hasattr(self, "tasks_list") or self.tasks_list is None:
+            return
+
         self.tasks_list.clear()
 
         active_tasks = self.task_manager.get_active_tasks()
@@ -2674,14 +2676,19 @@ class ProcastiNOMainWindow(QMainWindow):
         if dialog.exec_() == QDialog.Accepted:
             task_data = dialog.get_task_data()
             if task_data["title"]:
+                app_assigned = task_data.get("app_assigned")
+                # Convert empty string to None for consistency
+                if app_assigned == "":
+                    app_assigned = None
+
                 self.task_manager.create_task(
                     task_data["title"],
                     task_data["description"],
-                    task_data.get("app_assigned", ""),
+                    app_assigned,
                     task_data.get("priority", "Medium"),
                 )
                 # Refresh the appropriate list based on current page
-                if hasattr(self, "populate_tasks_list"):
+                if hasattr(self, "tasks_list") and self.tasks_list is not None:
                     self.populate_tasks_list()  # Refresh tasks page list
                 if (
                     hasattr(self, "dashboard_tasks_list")
