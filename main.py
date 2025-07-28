@@ -76,7 +76,7 @@ try:
     from modules.task_manager import TaskManager
     from modules.break_reminder import BreakReminder
     from modules.analytics import ScreenTimeAnalytics, AnalyticsWidget
-    
+
     MODULES_AVAILABLE = True
     print("✓ All custom modules imported successfully!")
 except ImportError as e:
@@ -85,6 +85,8 @@ except ImportError as e:
 except Exception as e:
     print(f"Module import error (other): {e}")
     MODULES_AVAILABLE = False
+
+
 # Fallback classes if modules aren't available
 class FallbackTaskManager:
     def __init__(self):
@@ -1397,7 +1399,9 @@ class ProcastiNOMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.app_tracker = None
-        self.task_manager = TaskManager() if MODULES_AVAILABLE else FallbackTaskManager()
+        self.task_manager = (
+            TaskManager() if MODULES_AVAILABLE else FallbackTaskManager()
+        )
         self.last_active_app = None
         self.session_start = datetime.now()
         self.current_apps = []  # keep track of what apps are running
