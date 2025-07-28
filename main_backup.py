@@ -6,7 +6,6 @@ import psutil
 import time
 import json
 import os
-import warnings
 from datetime import datetime, timedelta
 from PyQt5.QtWidgets import (
     QApplication,
@@ -38,14 +37,9 @@ from PyQt5.QtGui import QFont, QPixmap, QPalette, QColor
 from PyQt5.QtCore import Qt, QTimer, QThread, pyqtSignal
 import threading
 
-# Suppress numpy warnings that cause crashes
-warnings.filterwarnings("ignore", category=RuntimeWarning)
-warnings.filterwarnings("ignore", message=".*MINGW.*")
-
 # Try to import ML stuff - not everyone has sklearn installed
 try:
     import warnings
-
     warnings.filterwarnings("ignore", category=RuntimeWarning)
     from sklearn.ensemble import RandomForestClassifier
     from sklearn.preprocessing import StandardScaler
@@ -76,26 +70,27 @@ try:
     from modules.task_manager import TaskManager
     from modules.break_reminder import BreakReminder
     from modules.analytics import ScreenTimeAnalytics, AnalyticsWidget
-    
+
     MODULES_AVAILABLE = True
-    print("✓ All custom modules imported successfully!")
 except ImportError as e:
     print(f"Module import error: {e}")
     MODULES_AVAILABLE = False
 except Exception as e:
     print(f"Module import error (other): {e}")
     MODULES_AVAILABLE = False
+
+
 # Fallback classes if modules aren't available
 class FallbackTaskManager:
     def __init__(self):
         self.tasks = []
-
+    
     def get_active_tasks(self):
         return []
-
+    
     def create_task(self, title, description="", app_assigned="", priority="Medium"):
         return True
-
+    
     def get_task_stats(self):
         return {"active": 0, "today_completed": 0, "completion_rate": 0.0}
 
@@ -103,7 +98,7 @@ class FallbackTaskManager:
 class FallbackDistraction:
     def extract_features(self, *args):
         return [0.5] * 6
-
+    
     def predict(self, features):
         return 0.3
 
