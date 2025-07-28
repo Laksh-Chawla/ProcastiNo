@@ -1,0 +1,10 @@
+PyQt5==5.15.10
+psutil==5.9.8
+pygetwindow==0.0.9
+scikit-learn==1.4.2
+matplotlib==3.8.4
+numpy==1.26.4
+pandas==2.2.2
+plyer==2.1.0
+pywin32==306
+joblib==1.4.2
